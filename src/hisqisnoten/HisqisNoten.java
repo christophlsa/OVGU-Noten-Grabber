@@ -9,12 +9,31 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HisqisNoten {
 
+    static final String URLSTR1 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=user&type=1";
+    static final String URLSTR2 = "https://idp.uni-magdeburg.de/idp/Authn/UserPassword";
+    static final String URLSTR3 = "https://vhisqis.uni-magdeburg.de/Shibboleth.sso/SAML2/POST";
+    static final String URLSTR4 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=user&type=1";
+    static final String URLSTR5 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=notenspiegelStudent&next=tree.vm&nextdir=qispos/notenspiegel/student&menuid=notenspiegelStudent&breadcrumb=notenspiegel&breadCrumbSource=menu&asi=";
+    
+    static final Pattern pattern1 = Pattern.compile("<input type=\"hidden\" name=\"RelayState\" value=\"(.+)\"/>");
+    static final Pattern pattern2 = Pattern.compile("<input type=\"hidden\" name=\"SAMLResponse\" value=\"(.+)\"/>");
+    static final Pattern pattern4 = Pattern.compile("asi=(.+?)\"");
+    static final Pattern pattern5 = Pattern.compile("<a href=\"(.+?)\" title=\"Leistungen f");
+    static final Pattern pattern6 = Pattern.compile("<table border=\"0\">(.+?)<\\/table>", Pattern.MULTILINE | Pattern.DOTALL);
+    static final Pattern pattern7 = Pattern.compile("<tr>(.+?)<\\/tr>", Pattern.MULTILINE | Pattern.DOTALL);
+    static final Pattern tdPattern = Pattern.compile("<td (.+?)>(.+?)<\\/td>", Pattern.MULTILINE | Pattern.DOTALL);
+    static final Pattern pattern8 = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
+
+    static final String outputFormat = "%-60s | %-10s | %-4s | %s";
+    
     public static void main(String[] args) {
         final String user;
         final String pass;
@@ -34,12 +53,6 @@ public class HisqisNoten {
 
         System.out.println("Bitte warten. Dies kann ein paar Sekunden dauern...");
         System.out.println();
-
-        final String URLSTR1 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=user&type=1";
-        final String URLSTR2 = "https://idp.uni-magdeburg.de/idp/Authn/UserPassword";
-        final String URLSTR3 = "https://vhisqis.uni-magdeburg.de/Shibboleth.sso/SAML2/POST";
-        final String URLSTR4 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=user&type=1";
-        final String URLSTR5 = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=notenspiegelStudent&next=tree.vm&nextdir=qispos/notenspiegel/student&menuid=notenspiegelStudent&breadcrumb=notenspiegel&breadCrumbSource=menu&asi=";
 
         try {
             // Cookiemanager - keine Ahnung ob noetig
@@ -63,11 +76,11 @@ public class HisqisNoten {
 
             String output2 = new Scanner(inStream2).useDelimiter("\\Z").next();
 
-            Matcher matcher1 = Pattern.compile("<input type=\"hidden\" name=\"RelayState\" value=\"(.+)\"/>").matcher(output2);
+            Matcher matcher1 = pattern1.matcher(output2);
             matcher1.find();
             final String RELAYSTATE = matcher1.group(1);
 
-            Matcher matcher2 = Pattern.compile("<input type=\"hidden\" name=\"SAMLResponse\" value=\"(.+)\"/>").matcher(output2);
+            Matcher matcher2 = pattern2.matcher(output2);
             matcher2.find();
             final String SAMLRESPONSE = matcher2.group(1);
 
@@ -89,7 +102,7 @@ public class HisqisNoten {
 
             String output4 = new Scanner(inStream4).useDelimiter("\\Z").next();
 
-            Matcher matcher4 = Pattern.compile("asi=(.+?)\"").matcher(output4);
+            Matcher matcher4 = pattern4.matcher(output4);
             matcher4.find();
             final String ASI = matcher4.group(1);
 
@@ -101,7 +114,6 @@ public class HisqisNoten {
 
             String output5 = new Scanner(inStream5).useDelimiter("\\Z").next();
 
-            Pattern pattern5 = Pattern.compile("<a href=\"(.+?)\" title=\"Leistungen f");
             Matcher matcher5 = pattern5.matcher(output5);
             matcher5.find();
             final String NOTENLINK = matcher5.group(1).replaceAll("&amp;", "&");
@@ -114,14 +126,13 @@ public class HisqisNoten {
 
             String output6 = new Scanner(inStream6).useDelimiter("\\Z").next();
 
-            Matcher matcher6 = Pattern.compile("<table border=\"0\">(.+?)<\\/table>", Pattern.MULTILINE | Pattern.DOTALL).matcher(output6);
+            Matcher matcher6 = pattern6.matcher(output6);
             matcher6.find();
             final String TABELLE = matcher6.group(1);
 
-            Matcher matcher7 = Pattern.compile("<tr>(.+?)<\\/tr>", Pattern.MULTILINE | Pattern.DOTALL).matcher(TABELLE);
+            Matcher matcher7 = pattern7.matcher(TABELLE);
 
             ArrayList<HQNContainer> noten = new ArrayList<HQNContainer>();
-            Pattern tdPattern = Pattern.compile("<td (.+?)>(.+?)<\\/td>", Pattern.MULTILINE | Pattern.DOTALL);
 
             matcher7.find();
             matcher7.find();
@@ -141,22 +152,40 @@ public class HisqisNoten {
                 String semester = tdMatcher.group(2).trim();
 
                 tdMatcher.find();
-                String note = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL).matcher(tdMatcher.group(2)).replaceAll("").trim();
+                String note = pattern8.matcher(tdMatcher.group(2)).replaceAll("").trim();
+                
+                tdMatcher.find();
+                String bestanden = tdMatcher.group(2).trim();
 
-                noten.add(new HQNContainer(fach, semester, note));
+                noten.add(new HQNContainer(fach, semester, note, bestanden));
             }
+            
+            // nach Semester sortieren
+            Collections.sort(noten, new Comparator<HQNContainer>() {
+                @Override
+                public int compare(HQNContainer t1, HQNContainer t2) {
+                    int compSem =  t1.getSemester().substring(5).compareTo(t2.getSemester().substring(5));
+                    
+                    if (compSem == 0) {
+                        return t1.getFach().compareTo(t2.getFach());
+                    }
+                    
+                    return compSem;
+                }
+            });
 
-            System.out.printf("%-50s | %-15s | %s", "Fach", "Semester", "Note");
+            System.out.printf(outputFormat, "Fach", "Semester", "Note", "Bestanden");
             System.out.println();
-            System.out.println("------------------------------------------------------------------------------");
-
+            System.out.println("--------------------------------------------"
+                    + "------------------------------------------------------");
+            
             for (HQNContainer hqnc : noten) {
-                System.out.printf("%-50s | %-15s | %s", hqnc.getFach(), hqnc.getSemester(), hqnc.getNote());
+                System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getBestanden());
                 System.out.println();
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.out);
         }
     }
 }
