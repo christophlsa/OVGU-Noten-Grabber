@@ -3,7 +3,7 @@
 Ein kleines Konsolenprogramm, welches von der Prüfungsnotenverwaltung "Hisqis"
 von der Otto-von-Guericke Universität Magdeburg die Noten holt und sie darstellt.
 
-http://blog.cgiesel.de/hisqis-noten-grabber
+<http://blog.cgiesel.de/hisqis-noten-grabber>
 
 ## Entwickeln
 
