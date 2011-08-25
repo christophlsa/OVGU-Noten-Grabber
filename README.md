@@ -17,7 +17,8 @@ möchte, muss sie die Quelldateien aus dem "src" nehmen.
 Derzeit gibt es noch Probleme mit den SSL Zertifikaten. Wer von diesem Problem
 betroffen ist, bekommt eine unbehandelte Exception.
 
-Wer davon betroffen ist, sollte sich den Hinweis auf der Webseite durchlesen.
+**UPDATE:** Wahrscheinlich ist der Bug jetzt gefixt. Bitte melden, wenn der Fehler
+noch auftritt.
 
 # Lizenz
 

@@ -8,12 +8,17 @@ import java.net.CookiePolicy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 
 public class HisqisNoten {
 
@@ -60,10 +65,25 @@ public class HisqisNoten {
             manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             CookieHandler.setDefault(manager);
 
+            // SSL Zeug - hoffentlich hilft es
+            KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+            InputStream is = Class.class.getResourceAsStream("/resources/keystore");
+            if (is == null) {
+            	throw new Exception();
+            }
+            ks.load(is, "password".toCharArray());
+            KeyManagerFactory km = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            km.init(ks, "password".toCharArray());
+            SSLContext sc = SSLContext.getInstance("SSLv3");
+            sc.init(km.getKeyManagers(), null, null);
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            
             // -- Seite 1 (leitet zur Login Seite) --
             URL url1 = new URL(URLSTR1);
             url1.openConnection().getInputStream();
-
+            
+            //HttpsURLConnection.s
+            
             // -- Seite 2 (Login Seite) --
             URL url2 = new URL(URLSTR2);
             URLConnection is2 = url2.openConnection();
