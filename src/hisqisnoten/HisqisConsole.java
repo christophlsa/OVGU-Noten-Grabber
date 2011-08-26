@@ -1,11 +1,14 @@
 package hisqisnoten;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class HisqisConsole {
 	
+	static final String GETUSERNAME = "Enter Username: ";
+	static final String GETPASSWORD = "Enter Password: ";
 	static final String outputFormat = "%-60s | %-10s | %-4s | %s";
 	
 	private String user;
@@ -13,11 +16,18 @@ public class HisqisConsole {
 
 	public HisqisConsole(String user, String password) {
 		if (user == null || password == null) {
-			Scanner sc = new Scanner(System.in);
-		    System.out.print("Username: ");
-		    this.user = sc.next().trim();
-		    System.out.print("Passwort: ");
-		    this.password = sc.next().trim();
+			Console console = System.console();
+			
+			if (console != null) {
+				this.user = String.valueOf(console.readLine(GETUSERNAME)).trim();
+			    this.password = String.valueOf(console.readPassword(GETPASSWORD)).trim();
+			} else {
+				Scanner sc = new Scanner(System.in);
+			    System.out.print(GETUSERNAME);
+			    this.user = sc.next().trim();
+			    System.out.print(GETPASSWORD);
+			    this.password = sc.next().trim();
+			}
 		} else {
 			this.user = user;
 			this.password = password;
