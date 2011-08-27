@@ -62,12 +62,15 @@ public class HisqisGrabber {
 	static final Pattern tablePattern = Pattern.compile("<table border=\"0\">(.+?)<\\/table>", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern marksPattern = Pattern.compile("<tr>(.+?)<\\/tr>", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern tdPattern = Pattern.compile("<td (.+?)>(.+?)<\\/td>", Pattern.MULTILINE | Pattern.DOTALL);
-	static final Pattern markPattern = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
+	static final Pattern htmlCommentPattern = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
 
 	private String relaystate = "";
 	private String samlresponse = "";
 	private String asi = "";
 	private String studyCourseURL = "";
+	
+	private String averageGrade = "";
+	private String totalCreditPoints = "";
 	
 	private ArrayList<HQNContainer> marks;
 
@@ -294,10 +297,20 @@ public class HisqisGrabber {
         marksMatcher.find();
 
         while (marksMatcher.find()) {
-            Matcher tdMatcher = tdPattern.matcher(marksMatcher.group(1));
+            Matcher tdMatcher = tdPattern.matcher(htmlCommentPattern.matcher(marksMatcher.group(1)).replaceAll(""));
             tdMatcher.find();
 
             if (tdMatcher.group().contains("<b>")) {
+            	tdMatcher.find();
+            	if (tdMatcher.group(2).contains("Durchschnittsnote")) {
+            		tdMatcher.find();
+            		averageGrade = tdMatcher.group(2).trim();
+            		
+            		tdMatcher.find();
+            		tdMatcher.find();
+            		totalCreditPoints = tdMatcher.group(2).trim();
+            	}
+            	
                 continue;
             }
 
@@ -308,7 +321,7 @@ public class HisqisGrabber {
             String term = tdMatcher.group(2).trim();
 
             tdMatcher.find();
-            String mark = markPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
+            String mark = htmlCommentPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
             
             tdMatcher.find();
             String passed = tdMatcher.group(2).trim();
@@ -380,5 +393,19 @@ public class HisqisGrabber {
 	 */
 	public ArrayList<HQNContainer> getMarks() {
 		return marks;
+	}
+
+	/**
+	 * @return the average grade
+	 */
+	public String getAverageGrade() {
+		return averageGrade;
+	}
+
+	/**
+	 * @return total credit points
+	 */
+	public String getTotalCreditPoints() {
+		return totalCreditPoints;
 	}
 }

@@ -74,6 +74,12 @@ public class HisqisConsole {
             System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getBestanden());
             System.out.println();
         }
+        
+        System.out.println("--------------------------------------------"
+                + "------------------------------------------------------");
+        
+        System.out.printf(outputFormat, "total credit points: " + grabber.getTotalCreditPoints(), "", grabber.getAverageGrade(), "");
+        System.out.println();
 	}
 	
 }
