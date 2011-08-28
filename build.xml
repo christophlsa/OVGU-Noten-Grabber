@@ -42,15 +42,19 @@
     <delete dir="${doc}" />
   </target>
   
-  <target name="dist" depends="build,doc">
+  <target name="dist" depends="clean,build,doc">
     <copy todir="${dist}/src">
       <fileset dir="${src}" />
     </copy>
     <copy todir="${dist}/doc">
       <fileset dir="${doc}" />
     </copy>
-    <copy todir="${dist}">
-      <fileset dir="${build}" />
+    <copy todir="${dist}" flatten="true">
+      <resources>
+        <file file="README.md"/>
+        <file file="gpl-3.0.txt"/>
+        <file file="build.xml"/>
+      </resources>
     </copy>
     <tar destfile="${dist}/HisqisNoten-${DSTAMP}${TSTAMP}.tar.bz2"
         basedir="${dist}" compression="bzip2" />
