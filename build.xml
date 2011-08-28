@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="build" name="OVGU Noten Grabber">
+  <property name="src" location="src" />
+  <property name="build" location="build" />
+  <property name="dist" location="dist" />
+  <property name="doc" location="doc" />
+  <property name="dist" location="dist" />
+  
+  <path id="project.class.path">
+    <pathelement path="${build}/"/>
+  </path>
+  
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+  
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+      <classpath refid="project.class.path" />
+    </javac>
+  </target>
+  
+  <target name="build" depends="compile">
+    <jar destfile="${dist}/HisqisNoten.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" value="hisqisnoten.HisqisNoten" />
+      </manifest>
+      <fileset dir="${src}">
+        <exclude name="**/*.java" />
+      </fileset>
+    </jar>
+  </target>
+  
+  <target name="doc" depends="init">
+    <javadoc defaultexcludes="true" sourcepath="${src}" destdir="${doc}" />
+  </target>
+  
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+    <delete dir="${doc}" />
+  </target>
+  
+  <target name="dist" depends="build,doc">
+    <copy todir="${dist}/src">
+      <fileset dir="${src}" />
+    </copy>
+    <copy todir="${dist}/doc">
+      <fileset dir="${doc}" />
+    </copy>
+    <copy todir="${dist}">
+      <fileset dir="${build}" />
+    </copy>
+    <tar destfile="${dist}/HisqisNoten-${DSTAMP}${TSTAMP}.tar.bz2"
+        basedir="${dist}" compression="bzip2" />
+  </target>
+</project>
