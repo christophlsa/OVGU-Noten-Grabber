@@ -112,7 +112,7 @@ public class HisqisGrabber {
 	/**
 	 * SSL Zeug - hoffentlich hilft es
 	 * 
-	 * @return
+	 * @return false on error
 	 */
 	protected boolean prepareSSL() {
 		try {
@@ -178,6 +178,7 @@ public class HisqisGrabber {
 	 * 
 	 * @param referer
 	 *            URL to predecessor page
+	 * @return URL to second page
 	 * @throws IOException
 	 *             invalid URL or I/O Error
 	 */
@@ -213,7 +214,7 @@ public class HisqisGrabber {
 	 * gets login page data
 	 * 
 	 * @param referer
-	 * @return
+	 * @return URL to third page
 	 * @throws UnsupportedEncodingException
 	 * @throws IOException
 	 */
@@ -239,7 +240,7 @@ public class HisqisGrabber {
 	 * startpage
 	 * 
 	 * @param referer
-	 * @return
+	 * @return URL to fourth page
 	 * @throws IOException
 	 */
 	protected URL doStep4(URL referer) throws IOException {
@@ -263,7 +264,7 @@ public class HisqisGrabber {
 	 * overview of study courses
 	 * 
 	 * @param referer
-	 * @return
+	 * @return URL to fifth page
 	 * @throws IOException
 	 */
 	protected URL doStep5(URL referer) throws IOException {
@@ -287,7 +288,7 @@ public class HisqisGrabber {
 	 * marks overview
 	 * 
 	 * @param referer
-	 * @return
+	 * @return URL to sixth page
 	 * @throws IOException
 	 */
 	protected URL doStep6(URL referer) throws IOException {

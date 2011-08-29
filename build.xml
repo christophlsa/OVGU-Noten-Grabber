@@ -51,7 +51,9 @@
   </target>
   
   <target name="doc" depends="init">
-    <javadoc defaultexcludes="true" sourcepath="${src}" destdir="${doc}" />
+    <javadoc defaultexcludes="true" sourcepath="${src}" destdir="${doc}">
+      <classpath refid="project.class.path" />
+    </javadoc>
   </target>
   
   <target name="clean">
@@ -84,6 +86,7 @@
   
   <!-- ivy stuff -->
   <target name="download-ivy">
+    <mkdir dir="${ivy.jar.dir}" />
     <get  src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
   </target>
   
