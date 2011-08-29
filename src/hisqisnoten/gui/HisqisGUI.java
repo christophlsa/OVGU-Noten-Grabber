@@ -13,6 +13,7 @@ import java.util.Collections;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 public class HisqisGUI extends JFrame {
 
@@ -53,11 +54,23 @@ public class HisqisGUI extends JFrame {
 		
 		tableModel = new HisqisTableModel(marks);
 		table = new JTable(tableModel);
+		
+		table.getColumnModel().getColumn(0).setMinWidth(350);
+		
+		table.getColumnModel().getColumn(1).setMinWidth(100);
+		table.getColumnModel().getColumn(1).setMaxWidth(100);
+		
+		table.getColumnModel().getColumn(2).setMinWidth(50);
+		table.getColumnModel().getColumn(2).setMaxWidth(50);
+		
+		table.getColumnModel().getColumn(3).setMinWidth(120);
+		table.getColumnModel().getColumn(3).setMaxWidth(120);
+		
 		scrollPane = new JScrollPane(table);
 		
 		add(scrollPane, BorderLayout.CENTER);
 		
-		pack();
+		//pack();
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
