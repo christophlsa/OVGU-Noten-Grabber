@@ -16,6 +16,8 @@
 
 package hisqisnoten;
 
+import hisqisnoten.console.HisqisConsole;
+
 /**
  * 
  * @author Christoph Giesel

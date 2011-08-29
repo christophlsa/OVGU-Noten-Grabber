@@ -14,7 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package hisqisnoten;
+package hisqisnoten.console;
+
+import hisqisnoten.HQNContainer;
+import hisqisnoten.HQNContainerComparator;
+import hisqisnoten.HisqisGrabber;
 
 import java.io.Console;
 import java.util.ArrayList;
