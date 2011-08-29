@@ -48,7 +48,7 @@ möchte, muss die Quelldateien aus dem **src** nehmen.
   
 * Apache Ant
   (<http://ant.apache.org>)
-**oder**
+***oder***
 * Eclipse
   (<http://www.eclipse.org>)
 
@@ -60,6 +60,16 @@ Einfach das Projekt importieren und erstellen lassen.
 
 Im Projekt Verzeichnis **ant** ausführen. Daraufhin wird im Ordner **dist** die
 Datei **HisqisNoten.jar** erstellt.
+
+**Build Targets:**
+
+* **init**    :: erstellt die benötigten Ordner
+* **compile** :: erstellt im Ordner *build* die class Dateien
+* **build**   :: erstellt die Jar Datei im Ordner *dist*
+* **doc**     :: erstellt die Javadoc Dateien im Ordner *doc*
+* **dist**    :: kopiert die erstellten Dateien und den Quellcode in den Ordner
+                 *dist* und erstellt eine komprimiertes Tar Archiv.
+* **clean**   :: löscht alle erstellten Ordner
 
 
 ## Probleme
