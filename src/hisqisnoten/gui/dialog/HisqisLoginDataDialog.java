@@ -46,9 +46,11 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 	JLabel labelPassword;
 	JPasswordField passwordfieldPassword;
 	JButton buttonLogin;
+	
+	boolean success = false;
 
-	public HisqisLoginDataDialog(JFrame owner) {
-		super(owner, "Login Data", true);
+	public HisqisLoginDataDialog(JFrame parent, String username, String password) {
+		super(parent, "Login Data", true);
 		
 		JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
@@ -67,6 +69,9 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
         cs.gridy = 0;
         cs.gridwidth = 2;
         panel.add(textfieldUsername, cs);
+        
+        if (username != null)
+        	textfieldUsername.setText(username);
 
         labelPassword = new JLabel("Password: ");
         cs.gridx = 0;
@@ -82,6 +87,9 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
         panel.add(passwordfieldPassword, cs);
         panel.setBorder(new LineBorder(Color.GRAY));
 
+        if (password != null)
+        	passwordfieldPassword.setText(password);
+        
         buttonLogin = new JButton("Login");
         
         buttonLogin.addActionListener(this);
@@ -91,12 +99,13 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 
         pack();
         setResizable(false);
-        setLocationRelativeTo(owner);
+        setLocationRelativeTo(parent);
         
         setVisible(true);
 	}
 	
 	public void done() {
+		success = true;
 		dispose();
 	}
 
@@ -123,8 +132,11 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 	public void keyTyped(KeyEvent event) {
 	}
 	
-	public static String[] getLoginDataViaDialog(JFrame parent) {
-		HisqisLoginDataDialog dialog = new HisqisLoginDataDialog(parent);
+	public static String[] getLoginDataViaDialog(JFrame parent, String username, String password) {
+		HisqisLoginDataDialog dialog = new HisqisLoginDataDialog(parent, username, password);
+		
+		if(!dialog.success)
+			System.exit(1);
 		
 		return new String[] {
 					dialog.textfieldUsername.getText().trim(),

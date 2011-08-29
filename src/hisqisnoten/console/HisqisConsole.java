@@ -37,26 +37,32 @@ public class HisqisConsole {
 	static final String GETPASSWORD = "Enter Password: ";
 	static final String outputFormat = "%-60s | %-10s | %-4s | %3s | %s";
 	
-	private String user;
+	private String username;
 	private String password;
 
 	public HisqisConsole(String user, String password) {
-		if (user == null || password == null) {
+		this.username = user;
+		this.password = password;
+		
+		if (this.username == null || this.password == null) {
 			Console console = System.console();
 			
 			if (console != null) {
-				this.user = String.valueOf(console.readLine(GETUSERNAME)).trim();
-			    this.password = String.valueOf(console.readPassword(GETPASSWORD)).trim();
+				if (this.username == null)
+					this.username = String.valueOf(console.readLine(GETUSERNAME)).trim();
+				if (this.password == null)
+					this.password = String.valueOf(console.readPassword(GETPASSWORD)).trim();
 			} else {
 				Scanner sc = new Scanner(System.in);
-			    System.out.print(GETUSERNAME);
-			    this.user = sc.next().trim();
-			    System.out.print(GETPASSWORD);
-			    this.password = sc.next().trim();
+				if (this.username == null) {
+				    System.out.print(GETUSERNAME);
+				    this.username = sc.next().trim();
+				}
+				if (this.password == null) {
+				    System.out.print(GETPASSWORD);
+				    this.password = sc.next().trim();
+				}
 			}
-		} else {
-			this.user = user;
-			this.password = password;
 		}
 
         System.out.println();
@@ -64,7 +70,7 @@ public class HisqisConsole {
 		System.out.println("Bitte warten. Dies kann ein paar Sekunden dauern...");
         System.out.println();
 
-        HisqisGrabber grabber = new HisqisGrabber(this.user, this.password);
+        HisqisGrabber grabber = new HisqisGrabber(this.username, this.password);
         HisqisGrabberResults results = grabber.process();
         
         ArrayList<HQNContainer> marks = results.getMarks();

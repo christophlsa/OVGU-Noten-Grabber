@@ -52,12 +52,12 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
 	JLabel averageMarkLabel;
 	JLabel totalCPLabel;
 	
-	private String user;
+	private String username;
 	private String password;
 	
 	HisqisGUIGrabber grabber;
 
-	public HisqisGUI(String user, String password) {
+	public HisqisGUI(String username, String password) {
 		super();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,17 +116,17 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
         setLocationRelativeTo(null);
         setVisible(true);
         
-        if (user == null || password == null) {
-        	String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this);
+        if (username == null || password == null) {
+        	String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, username, password);
         	
-        	this.user = loginData[0];
+        	this.username = loginData[0];
         	this.password = loginData[1];
         } else {
-        	this.user = user;
+        	this.username = username;
         	this.password = password;
         }
         
-        grabber = new HisqisGUIGrabber(this.user, this.password);
+        grabber = new HisqisGUIGrabber(this.username, this.password);
         grabber.addPropertyChangeListener(this);
 
         grabber.execute();
