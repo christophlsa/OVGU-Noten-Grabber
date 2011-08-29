@@ -16,6 +16,13 @@
 
 package hisqisnoten;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
+
 import hisqisnoten.console.HisqisConsole;
 import hisqisnoten.gui.HisqisGUI;
 
@@ -25,17 +32,43 @@ import hisqisnoten.gui.HisqisGUI;
  *
  */
 public class HisqisNoten {
+	
+	public static Options options;
     
     public static void main(String[] args) {
-        String user = null;
-        String pass = null;
-
-        if (args.length == 2) {
-            user = args[0];
-            pass = args[1];
-        }
-
-        new HisqisGUI(user, pass);
-        //new HisqisConsole(user, pass);
+        options = new Options();
+        options.addOption("h", "help", false, "this help");
+        options.addOption("u", "user", true, "username for hisqis");
+        options.addOption("p", "pass", true, "password for hisqis");
+        options.addOption("c", "console", false, "console mode instead of gui mode");
+        
+        CommandLineParser parser = new PosixParser();
+        
+        try {
+			CommandLine cmdline = parser.parse(options, args);
+			
+			if (cmdline.hasOption("help") || cmdline.getArgList().size() != 0) {
+				System.err.println("Please use the new commandline options.");
+				System.out.println();
+				printHelp();
+				System.exit(1);
+			}
+			
+			String user = cmdline.getOptionValue("user", null);
+			String pass = cmdline.getOptionValue("pass", null);
+			
+			if (cmdline.hasOption("console")) {
+				new HisqisConsole(user, pass);
+			} else {
+				new HisqisGUI(user, pass);
+			}
+		} catch (ParseException e) {
+			printHelp();
+		}
+    }
+    
+    public static void printHelp() {
+    	HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("java -jar HisqisNoten.jar", options);
     }
 }
