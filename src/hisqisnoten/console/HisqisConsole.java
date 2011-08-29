@@ -34,7 +34,7 @@ public class HisqisConsole {
 	
 	static final String GETUSERNAME = "Enter Username: ";
 	static final String GETPASSWORD = "Enter Password: ";
-	static final String outputFormat = "%-60s | %-10s | %-4s | %s";
+	static final String outputFormat = "%-60s | %-10s | %-4s | %3s | %s";
 	
 	private String user;
 	private String password;
@@ -69,20 +69,20 @@ public class HisqisConsole {
         // nach Semester sortieren
         Collections.sort(marks, new HQNContainerComparator());
 
-        System.out.printf(outputFormat, "Fach", "Semester", "Note", "Bestanden");
+        System.out.printf(outputFormat, "Fach", "Semester", "Note", "CP", "Bestanden");
         System.out.println();
         System.out.println("--------------------------------------------"
-                + "------------------------------------------------------");
+                + "----------------------------------------------------------");
         
         for (HQNContainer hqnc : marks) {
-            System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getBestanden());
+            System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getCreditpoints(), hqnc.getBestanden());
             System.out.println();
         }
         
         System.out.println("--------------------------------------------"
-                + "------------------------------------------------------");
+                + "----------------------------------------------------------");
         
-        System.out.printf(outputFormat, "total credit points: " + grabber.getTotalCreditPoints(), "", grabber.getAverageGrade(), "");
+        System.out.printf(outputFormat, "total", "", grabber.getAverageGrade(), grabber.getTotalCreditPoints(), "");
         System.out.println();
 	}
 	

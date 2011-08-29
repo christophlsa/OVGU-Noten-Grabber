@@ -63,7 +63,8 @@ public class HisqisGrabber {
 	static final Pattern marksPattern = Pattern.compile("<tr>(.+?)<\\/tr>", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern tdPattern = Pattern.compile("<td (.+?)>(.+?)<\\/td>", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern htmlCommentPattern = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
-
+	static final Pattern commaZeroPattern = Pattern.compile(",0");
+	
 	private String relaystate = "";
 	private String samlresponse = "";
 	private String asi = "";
@@ -308,7 +309,7 @@ public class HisqisGrabber {
             		
             		tdMatcher.find();
             		tdMatcher.find();
-            		totalCreditPoints = tdMatcher.group(2).trim();
+            		totalCreditPoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
             	}
             	
                 continue;
@@ -325,8 +326,11 @@ public class HisqisGrabber {
             
             tdMatcher.find();
             String passed = tdMatcher.group(2).trim();
+            
+            tdMatcher.find();
+            String creditpoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
 
-            marks.add(new HQNContainer(subject, term, mark, passed));
+            marks.add(new HQNContainer(subject, term, mark, passed, creditpoints));
         }
         
         return url;

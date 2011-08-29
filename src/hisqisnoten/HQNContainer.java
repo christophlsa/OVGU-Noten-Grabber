@@ -27,12 +27,14 @@ public class HQNContainer {
     private String semester;
     private String note;
     private String bestanden;
+    private String creditpoints;
 
-    public HQNContainer(String fach, String semester, String note, String bestanden) {
+    public HQNContainer(String fach, String semester, String note, String bestanden, String creditpoints) {
         this.fach = fach;
         this.semester = semester;
         this.note = note;
         this.bestanden = bestanden;
+        this.creditpoints = creditpoints;
     }
 
     public String getFach() {
@@ -66,4 +68,12 @@ public class HQNContainer {
     public void setBestanden(String bestanden) {
         this.bestanden = bestanden;
     }
+
+	public String getCreditpoints() {
+		return creditpoints;
+	}
+
+	public void setCreditpoints(String cp) {
+		this.creditpoints = cp;
+	}
 }
