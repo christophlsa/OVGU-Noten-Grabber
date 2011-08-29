@@ -24,6 +24,7 @@ import hisqisnoten.gui.dialog.HisqisLoginDataDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,6 +49,8 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
 	JTable table;
 	JScrollPane scrollPane;
 	JProgressBar progressBar;
+	JLabel averageMarkLabel;
+	JLabel totalCPLabel;
 	
 	private String user;
 	private String password;
@@ -84,21 +89,34 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
 		
 		add(scrollPane, BorderLayout.CENTER);
 		
+		JPanel bottomPanel = new JPanel(new FlowLayout());
+		
+		JLabel averageMarkTitleLabel = new JLabel("Note: ");
+		bottomPanel.add(averageMarkTitleLabel);
+		averageMarkLabel = new JLabel("   ");
+		bottomPanel.add(averageMarkLabel);
+		
+		bottomPanel.add(new JLabel("   "));
+		
+		JLabel totalCPTitleLabel = new JLabel("CP: ");
+		bottomPanel.add(totalCPTitleLabel);
+		totalCPLabel = new JLabel("   ");
+		bottomPanel.add(totalCPLabel);
+		
+		bottomPanel.add(new JLabel("   "));
+		
 		progressBar = new JProgressBar(0, 6);
 		progressBar.setValue(0);
 		progressBar.setStringPainted(true);
 		
-		add(progressBar, BorderLayout.SOUTH);
+		bottomPanel.add(progressBar);
 		
-		//pack();
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+		add(bottomPanel, BorderLayout.SOUTH);
+		
         setLocationRelativeTo(null);
         setVisible(true);
         
         if (user == null || password == null) {
-        	//System.err.println("Username and Password missing!");
-        	//System.exit(1);
-        	
         	String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this);
         	
         	this.user = loginData[0];
@@ -131,6 +149,9 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
 			        Collections.sort(marks, new HQNContainerComparator());
 
 			        tableModel.setMarks(marks);
+			        
+			        averageMarkLabel.setText(results.getAverageGrade());
+			        totalCPLabel.setText(results.getTotalCreditPoints());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

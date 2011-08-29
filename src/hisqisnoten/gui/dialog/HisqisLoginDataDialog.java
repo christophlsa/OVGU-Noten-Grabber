@@ -22,6 +22,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -32,7 +34,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-public class HisqisLoginDataDialog extends JDialog implements ActionListener {
+public class HisqisLoginDataDialog extends JDialog implements ActionListener, KeyListener {
 
 	/**
 	 * I don't know why but Eclipse expects a version id.
@@ -60,6 +62,7 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener {
         panel.add(labelUsername, cs);
 
         textfieldUsername = new JTextField(20);
+        textfieldUsername.addKeyListener(this);
         cs.gridx = 1;
         cs.gridy = 0;
         cs.gridwidth = 2;
@@ -72,6 +75,7 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener {
         panel.add(labelPassword, cs);
 
         passwordfieldPassword = new JPasswordField(20);
+        passwordfieldPassword.addKeyListener(this);
         cs.gridx = 1;
         cs.gridy = 1;
         cs.gridwidth = 2;
@@ -91,13 +95,32 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener {
         
         setVisible(true);
 	}
+	
+	public void done() {
+		dispose();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(buttonLogin)) {
-			dispose();
+			done();
 		}
 		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+			done();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent event) {
 	}
 	
 	public static String[] getLoginDataViaDialog(JFrame parent) {
