@@ -78,6 +78,7 @@
         <file file="README.md"/>
         <file file="gpl-3.0.txt"/>
         <file file="build.xml"/>
+        <file file="ivy.xml"/>
       </resources>
     </copy>
     <tar destfile="${dist}/HisqisNoten-${DSTAMP}${TSTAMP}.tar.bz2"
