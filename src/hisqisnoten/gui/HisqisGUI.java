@@ -63,8 +63,11 @@ public class HisqisGUI extends JFrame {
 		table.getColumnModel().getColumn(2).setMinWidth(50);
 		table.getColumnModel().getColumn(2).setMaxWidth(50);
 		
-		table.getColumnModel().getColumn(3).setMinWidth(120);
-		table.getColumnModel().getColumn(3).setMaxWidth(120);
+		table.getColumnModel().getColumn(3).setMinWidth(50);
+		table.getColumnModel().getColumn(3).setMaxWidth(50);
+		
+		table.getColumnModel().getColumn(4).setMinWidth(120);
+		table.getColumnModel().getColumn(4).setMaxWidth(120);
 		
 		scrollPane = new JScrollPane(table);
 		

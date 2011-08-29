@@ -23,7 +23,7 @@ public class HisqisTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 4;
+		return 5;
 	}
 
 	@Override
@@ -45,6 +45,8 @@ public class HisqisTableModel extends AbstractTableModel {
 			case 2:
 				return "Note";
 			case 3:
+				return "CP";
+			case 4:
 				return "Bestanden";
 			default:
 				return "";
@@ -69,6 +71,8 @@ public class HisqisTableModel extends AbstractTableModel {
 			case 2:
 				return mark.getNote();
 			case 3:
+				return mark.getCreditpoints();
+			case 4:
 				return mark.getBestanden();
 			default:
 				return "";
