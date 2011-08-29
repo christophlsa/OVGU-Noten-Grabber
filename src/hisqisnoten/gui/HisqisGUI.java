@@ -1,21 +1,41 @@
+/* Copyright (C) 2010-2011 Christoph Giesel
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package hisqisnoten.gui;
 
 import hisqisnoten.HQNContainer;
 import hisqisnoten.HQNContainerComparator;
-import hisqisnoten.HisqisGrabber;
+import hisqisnoten.HisqisGUIGrabber;
+import hisqisnoten.HisqisGrabberResults;
 import hisqisnoten.gui.dialog.HisqisLoginDataDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JFrame;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class HisqisGUI extends JFrame {
+public class HisqisGUI extends JFrame implements PropertyChangeListener {
 
 	/**
 	 * I don't know why but Eclipse expects a version id.
@@ -25,9 +45,12 @@ public class HisqisGUI extends JFrame {
 	HisqisTableModel tableModel;
 	JTable table;
 	JScrollPane scrollPane;
+	JProgressBar progressBar;
 	
 	private String user;
 	private String password;
+	
+	HisqisGUIGrabber grabber;
 
 	public HisqisGUI(String user, String password) {
 		super();
@@ -37,6 +60,8 @@ public class HisqisGUI extends JFrame {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
         setTitle("Hisqis Noten Grabber");
+        
+        setLayout(new BorderLayout());
 		
 		tableModel = new HisqisTableModel(null);
 		table = new JTable(tableModel);
@@ -59,6 +84,12 @@ public class HisqisGUI extends JFrame {
 		
 		add(scrollPane, BorderLayout.CENTER);
 		
+		progressBar = new JProgressBar(0, 6);
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
+		
+		add(progressBar, BorderLayout.SOUTH);
+		
 		//pack();
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -77,12 +108,33 @@ public class HisqisGUI extends JFrame {
         	this.password = password;
         }
         
-        HisqisGrabber grabber = new HisqisGrabber(this.user, this.password);
-        ArrayList<HQNContainer> marks = grabber.process();
-            
-        // nach Semester sortieren
-        Collections.sort(marks, new HQNContainerComparator());
-        
-        tableModel.setMarks(marks);
+        grabber = new HisqisGUIGrabber(this.user, this.password);
+        grabber.addPropertyChangeListener(this);
+
+        grabber.execute();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getSource().equals(grabber)) {
+			if (event.getPropertyName().equals("progress")) {
+				progressBar.setValue((Integer) event.getNewValue());
+			}
+			
+			if(grabber.isDone()) {
+				try {
+					HisqisGrabberResults results = grabber.get();
+					
+					ArrayList<HQNContainer> marks = results.getMarks();
+					
+					// nach Semester sortieren
+			        Collections.sort(marks, new HQNContainerComparator());
+
+			        tableModel.setMarks(marks);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

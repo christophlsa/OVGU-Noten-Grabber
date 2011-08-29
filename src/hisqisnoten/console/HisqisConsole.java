@@ -19,6 +19,7 @@ package hisqisnoten.console;
 import hisqisnoten.HQNContainer;
 import hisqisnoten.HQNContainerComparator;
 import hisqisnoten.HisqisGrabber;
+import hisqisnoten.HisqisGrabberResults;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -64,7 +65,9 @@ public class HisqisConsole {
         System.out.println();
 
         HisqisGrabber grabber = new HisqisGrabber(this.user, this.password);
-        ArrayList<HQNContainer> marks = grabber.process();
+        HisqisGrabberResults results = grabber.process();
+        
+        ArrayList<HQNContainer> marks = results.getMarks();
             
         // nach Semester sortieren
         Collections.sort(marks, new HQNContainerComparator());
@@ -82,7 +85,7 @@ public class HisqisConsole {
         System.out.println("--------------------------------------------"
                 + "----------------------------------------------------------");
         
-        System.out.printf(outputFormat, "total", "", grabber.getAverageGrade(), grabber.getTotalCreditPoints(), "");
+        System.out.printf(outputFormat, "total", "", results.getAverageGrade(), results.getTotalCreditPoints(), "");
         System.out.println();
 	}
 	

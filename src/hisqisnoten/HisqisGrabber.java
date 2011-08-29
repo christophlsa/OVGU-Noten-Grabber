@@ -43,11 +43,11 @@ import javax.net.ssl.SSLContext;
  */
 public class HisqisGrabber {
 
-	private String user;
-	private String password;
+	protected String user;
+	protected String password;
 
-	private String keystoreFile = "/resources/keystore";
-	private char[] keystorePassword = "password".toCharArray();
+	protected String keystoreFile = "/resources/keystore";
+	protected char[] keystorePassword = "password".toCharArray();
 
 	static final String PREDECESSORLOGINPAGEURL = "https://vhisqis.uni-magdeburg.de/qisserver/rds?state=user&type=1";
 	static final String LOGINPAGEURL = "https://idp.uni-magdeburg.de/idp/Authn/UserPassword";
@@ -65,15 +65,15 @@ public class HisqisGrabber {
 	static final Pattern htmlCommentPattern = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern commaZeroPattern = Pattern.compile(",0");
 	
-	private String relaystate = "";
-	private String samlresponse = "";
-	private String asi = "";
-	private String studyCourseURL = "";
+	protected String relaystate = "";
+	protected String samlresponse = "";
+	protected String asi = "";
+	protected String studyCourseURL = "";
 	
-	private String averageGrade = "";
-	private String totalCreditPoints = "";
+	protected String averageGrade = "";
+	protected String totalCreditPoints = "";
 	
-	private ArrayList<HQNContainer> marks;
+	protected ArrayList<HQNContainer> marks;
 
 	public HisqisGrabber() {
 		this(null, null);
@@ -86,12 +86,24 @@ public class HisqisGrabber {
 		prepareCookies();
 
 		prepareSSL();
+		
+		init();
+	}
+	
+	public void init() {
+		relaystate = "";
+		samlresponse = "";
+		asi = "";
+		studyCourseURL = "";
+		averageGrade = "";
+		totalCreditPoints = "";
+		marks = null;
 	}
 
 	/**
 	 * Cookiemanager - keine Ahnung ob noetig
 	 */
-	private void prepareCookies() {
+	protected void prepareCookies() {
 		CookieManager manager = new CookieManager();
 		manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 		CookieHandler.setDefault(manager);
@@ -102,7 +114,7 @@ public class HisqisGrabber {
 	 * 
 	 * @return
 	 */
-	private boolean prepareSSL() {
+	protected boolean prepareSSL() {
 		try {
 			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
@@ -129,8 +141,10 @@ public class HisqisGrabber {
 		return true;
 	}
 
-	public ArrayList<HQNContainer> process() {
+	public HisqisGrabberResults process() {
 		try {
+			init();
+			
 			URL url1 = doStep1();
 			URL url2 = doStep2(url1);
 			URL url3 = doStep3(url2);
@@ -142,7 +156,7 @@ public class HisqisGrabber {
 			return null;
 		}
 		
-		return marks;
+		return new HisqisGrabberResults(averageGrade, totalCreditPoints, marks);
 	}
 
 	/**
@@ -152,7 +166,7 @@ public class HisqisGrabber {
 	 * @throws IOException
 	 *             invalid URL or I/O Error
 	 */
-	private URL doStep1() throws IOException {
+	protected URL doStep1() throws IOException {
 		URL url = new URL(PREDECESSORLOGINPAGEURL);
 		url.openConnection().getInputStream();
 
@@ -167,7 +181,7 @@ public class HisqisGrabber {
 	 * @throws IOException
 	 *             invalid URL or I/O Error
 	 */
-	private URL doStep2(URL referer) throws IOException {
+	protected URL doStep2(URL referer) throws IOException {
 		URL url = new URL(LOGINPAGEURL);
 		URLConnection inputConnection = url.openConnection();
 
@@ -203,7 +217,7 @@ public class HisqisGrabber {
 	 * @throws UnsupportedEncodingException
 	 * @throws IOException
 	 */
-	private URL doStep3(URL referer) throws UnsupportedEncodingException, IOException {
+	protected URL doStep3(URL referer) throws UnsupportedEncodingException, IOException {
 		URL url3 = new URL(LOGINPAGEDATAGETTERURL);
 		URLConnection inputConnection = url3.openConnection();
 
@@ -228,7 +242,7 @@ public class HisqisGrabber {
 	 * @return
 	 * @throws IOException
 	 */
-	private URL doStep4(URL referer) throws IOException {
+	protected URL doStep4(URL referer) throws IOException {
         URL url = new URL(STARTPAGEURL);
         URLConnection inputStream = url.openConnection();
         
@@ -252,7 +266,7 @@ public class HisqisGrabber {
 	 * @return
 	 * @throws IOException
 	 */
-	private URL doStep5(URL referer) throws IOException {
+	protected URL doStep5(URL referer) throws IOException {
         URL url = new URL(STUDYCOURSESURL + URLEncoder.encode(asi, "UTF-8"));
         URLConnection inputStream = url.openConnection();
         
@@ -276,7 +290,7 @@ public class HisqisGrabber {
 	 * @return
 	 * @throws IOException
 	 */
-	private URL doStep6(URL referer) throws IOException {
+	protected URL doStep6(URL referer) throws IOException {
         URL url = new URL(studyCourseURL);
         URLConnection inputStream = url.openConnection();
         
