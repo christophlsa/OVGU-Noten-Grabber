@@ -17,6 +17,7 @@
 package hisqisnoten;
 
 import hisqisnoten.console.HisqisConsole;
+import hisqisnoten.gui.HisqisGUI;
 
 /**
  * 
@@ -34,6 +35,7 @@ public class HisqisNoten {
             pass = args[1];
         }
 
-        new HisqisConsole(user, pass);
+        new HisqisGUI(user, pass);
+        //new HisqisConsole(user, pass);
     }
 }
