@@ -1,6 +1,6 @@
 # OVGU Noten Grabber
 
-Ein kleines Konsolenprogramm, welches von der Prüfungsnotenverwaltung "Hisqis"
+Ein kleines Programm, welches von der Prüfungsnotenverwaltung "Hisqis"
 von der Otto-von-Guericke Universität Magdeburg die Noten holt und sie
 darstellt.
 
@@ -13,7 +13,8 @@ darstellt.
 
 Als aller erstes wird die Jar benötigt. Lade dazu entweder die aktuellste
 Version von <https://github.com/christophlsa/OVGU-Noten-Grabber/downloads>
-herunter und entpacke diese. Dort ist die **HisqisNoten.jar** enthalten.
+herunter und entpacke diese. Im Hauptverzeichnis ist die **HisqisNoten.jar**
+enthalten (zur Ausführung werden die anderen Dateien nicht benötigt).
 
 Oder hole dir den aktuellsten Quellcode mit dem Versionsverwaltungstool **git**:
 
@@ -24,19 +25,26 @@ Wenn du letzte Variante bevorzugst, so musst du noch den Quellcode kompilieren
 
 ### Ausführen
 
-Im selben Verzeichnis wie die Jar-Datei, rufst du entweder
+Im selben Verzeichnis wie die Jar-Datei, rufst du
 
-    java -jar HisqisNoten.jar <user> <pass>
+    java -jar HisqisNoten.jar -u <user> -p <pass>
 
-auf, wobei du **user** und **pass** durch die Hisqis Login Daten ersetzt
-(ohne <>). Oder lasse die Login Daten weg und du wirst beim Ausführen
+auf, wobei du **user** und **pass** durch die Hisqis Login Daten ersetzen musst
+(ohne <>). Du kannst auch die Login Daten weglassen und du wirst beim Ausführen
 aufgefordert diese anzugeben.
+
+### Parameter
+
+    -c,--console      Konsolen Modus (standardmäßig wird eine GUI benutzt)
+    -h,--help         zeigt diese Parameter an
+    -p,--pass <arg>   Passwort für Hisqis
+    -u,--user <arg>   Benutzername für Hisqis
 
 
 ## Entwickeln
 
 Dies ist ein Eclipse Java Projekt. Wer dies in einer anderen IDE entwickeln
-möchte, muss die Quelldateien aus dem **src** nehmen.
+möchte, muss die Quelldateien aus dem Verzeichnis **src** nehmen.
 
 
 ## Kompilieren
@@ -48,13 +56,17 @@ möchte, muss die Quelldateien aus dem **src** nehmen.
   
 * Apache Ant
   (<http://ant.apache.org>)
-***oder***
-* Eclipse
+
+* *optional:* Eclipse
   (<http://www.eclipse.org>)
 
 ### Eclipse
 
-Einfach das Projekt importieren und erstellen lassen.
+Einfach das Projekt importieren, im Projektverzeichnis auf der Kommandozeile
+    
+    ant resolve
+    
+aufrufen und in Eclipse normal arbeiten.
 
 ### ANT Build
 
@@ -64,6 +76,7 @@ Datei **HisqisNoten.jar** erstellt.
 **Build Targets:**
 
 * **init**    :: erstellt die benötigten Ordner
+* **resolve** :: holt automatisch die notwendigen Abhändigkeiten
 * **compile** :: erstellt im Ordner *build* die class Dateien
 * **build**   :: erstellt die Jar Datei im Ordner *dist*
 * **doc**     :: erstellt die Javadoc Dateien im Ordner *doc*
