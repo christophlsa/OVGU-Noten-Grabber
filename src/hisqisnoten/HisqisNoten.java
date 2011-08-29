@@ -47,9 +47,15 @@ public class HisqisNoten {
         try {
 			CommandLine cmdline = parser.parse(options, args);
 			
-			if (cmdline.hasOption("help") || cmdline.getArgList().size() != 0) {
+			if (cmdline.hasOption("help")) {
+				printHelp();
+				System.exit(0);
+			}
+			
+			if (cmdline.getArgList().size() != 0) {
 				System.err.println("Please use the new commandline options.");
 				System.out.println();
+				
 				printHelp();
 				System.exit(1);
 			}
