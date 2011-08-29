@@ -3,6 +3,7 @@ package hisqisnoten.gui;
 import hisqisnoten.HQNContainer;
 import hisqisnoten.HQNContainerComparator;
 import hisqisnoten.HisqisGrabber;
+import hisqisnoten.gui.dialog.HisqisLoginDataDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,12 +14,11 @@ import java.util.Collections;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 
 public class HisqisGUI extends JFrame {
 
 	/**
-	 * I don't know why'but Eclipse expect a version id.
+	 * I don't know why but Eclipse expects a version id.
 	 */
 	private static final long serialVersionUID = -8698476155618666560L;
 	
@@ -37,22 +37,8 @@ public class HisqisGUI extends JFrame {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
         setTitle("Hisqis Noten Grabber");
-        
-        if (user == null || password == null) {
-        	System.err.println("Username and Password missing!");
-        	System.exit(1);
-        } else {
-        	this.user = user;
-        	this.password = password;
-        }
-        
-        HisqisGrabber grabber = new HisqisGrabber(this.user, this.password);
-        ArrayList<HQNContainer> marks = grabber.process();
-            
-        // nach Semester sortieren
-        Collections.sort(marks, new HQNContainerComparator());
 		
-		tableModel = new HisqisTableModel(marks);
+		tableModel = new HisqisTableModel(null);
 		table = new JTable(tableModel);
 		
 		table.getColumnModel().getColumn(0).setMinWidth(350);
@@ -77,5 +63,26 @@ public class HisqisGUI extends JFrame {
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
+        
+        if (user == null || password == null) {
+        	//System.err.println("Username and Password missing!");
+        	//System.exit(1);
+        	
+        	String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this);
+        	
+        	this.user = loginData[0];
+        	this.password = loginData[1];
+        } else {
+        	this.user = user;
+        	this.password = password;
+        }
+        
+        HisqisGrabber grabber = new HisqisGrabber(this.user, this.password);
+        ArrayList<HQNContainer> marks = grabber.process();
+            
+        // nach Semester sortieren
+        Collections.sort(marks, new HQNContainerComparator());
+        
+        tableModel.setMarks(marks);
 	}
 }
