@@ -1,0 +1,85 @@
+<h1>OVGU Noten Grabber</h1>
+<p>Ein kleines Programm, welches von der Prüfungsnotenverwaltung "Hisqis"
+von der Otto-von-Guericke Universität Magdeburg die Noten holt und sie
+darstellt.</p>
+<p><a href="http://blog.cgiesel.de/hisqis-noten-grabber">http://blog.cgiesel.de/hisqis-noten-grabber</a></p>
+<h2>Benutzung</h2>
+<h3>Download</h3>
+<p>Als aller erstes wird die Jar benötigt. Lade dazu entweder die aktuellste
+Version von <a href="https://github.com/christophlsa/OVGU-Noten-Grabber/downloads">https://github.com/christophlsa/OVGU-Noten-Grabber/downloads</a>
+herunter und entpacke diese. Im Hauptverzeichnis ist die <strong>HisqisNoten.jar</strong>
+enthalten (zur Ausführung werden die anderen Dateien nicht benötigt).</p>
+<p>Oder hole dir den aktuellsten Quellcode mit dem Versionsverwaltungstool <strong>git</strong>:</p>
+<pre><code>git clone git://github.com/christophlsa/OVGU-Noten-Grabber.git
+</code></pre>
+<p>Wenn du letzte Variante bevorzugst, so musst du noch den Quellcode kompilieren
+(siehe Abschnitt <strong><em>Kompilieren</em></strong>).</p>
+<h3>Ausführen</h3>
+<p>Im selben Verzeichnis wie die Jar-Datei, rufst du</p>
+<pre><code>java -jar HisqisNoten.jar -u &lt;user&gt; -p &lt;pass&gt;
+</code></pre>
+<p>auf, wobei du <strong>user</strong> und <strong>pass</strong> durch die Hisqis Login Daten ersetzen musst
+(ohne &lt;&gt;). Du kannst auch die Login Daten weglassen und du wirst beim Ausführen
+aufgefordert diese anzugeben.</p>
+<h3>Parameter</h3>
+<pre><code>-c,--console      Konsolen Modus (standardmäßig wird eine GUI benutzt)
+-h,--help         zeigt diese Parameter an
+-p,--pass &lt;arg&gt;   Passwort für Hisqis
+-u,--user &lt;arg&gt;   Benutzername für Hisqis
+</code></pre>
+<h2>Entwickeln</h2>
+<p>Dies ist ein Eclipse Java Projekt. Wer dies in einer anderen IDE entwickeln
+möchte, muss die Quelldateien aus dem Verzeichnis <strong>src</strong> nehmen.</p>
+<h2>Kompilieren</h2>
+<p><strong>Voraussetzungen:</strong></p>
+<ul>
+<li>
+<p>Java JDK 1.6 oder höher
+  (<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>)</p>
+</li>
+<li>
+<p>Apache Ant
+  (<a href="http://ant.apache.org">http://ant.apache.org</a>)</p>
+</li>
+<li>
+<p><em>optional:</em> Eclipse
+  (<a href="http://www.eclipse.org">http://www.eclipse.org</a>)</p>
+</li>
+</ul>
+<h3>Eclipse</h3>
+<p>Einfach das Projekt importieren, im Projektverzeichnis auf der Kommandozeile</p>
+<pre><code>ant resolve
+</code></pre>
+<p>aufrufen und in Eclipse normal arbeiten.</p>
+<h3>ANT Build</h3>
+<p>Im Projekt Verzeichnis <strong>ant</strong> ausführen. Daraufhin wird im Ordner <strong>dist</strong> die
+Datei <strong>HisqisNoten.jar</strong> erstellt.</p>
+<p><strong>Build Targets:</strong></p>
+<ul>
+<li><strong>init</strong>    :: erstellt die benötigten Ordner</li>
+<li><strong>resolve</strong> :: holt automatisch die notwendigen Abhändigkeiten</li>
+<li><strong>compile</strong> :: erstellt im Ordner <em>build</em> die class Dateien</li>
+<li><strong>build</strong>   :: erstellt die Jar Datei im Ordner <em>dist</em></li>
+<li><strong>doc</strong>     :: erstellt die Javadoc Dateien im Ordner <em>doc</em></li>
+<li><strong>dist</strong>    :: kopiert die erstellten Dateien und den Quellcode in den Ordner
+                 <em>dist</em> und erstellt eine komprimiertes Tar Archiv.</li>
+<li><strong>clean</strong>   :: löscht alle erstellten Ordner</li>
+</ul>
+<h2>Probleme</h2>
+<h3>SSL Exception</h3>
+<p>Derzeit gibt es noch Probleme mit den SSL Zertifikaten. Wer von diesem Problem
+betroffen ist, bekommt eine unbehandelte Exception.</p>
+<p><strong>UPDATE:</strong> Wahrscheinlich ist der Bug jetzt gefixt. Bitte melden, falls der
+Fehler noch auftritt.</p>
+<h2>Lizenz</h2>
+<p>Copyright (C) 2010-2011 Christoph Giesel</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>

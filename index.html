@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset='utf-8'>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 
   <title>christophlsa/OVGU-Noten-Grabber @ GitHub</title>
-
   <style type="text/css">
+/*<![CDATA[*/
     body {
       margin-top: 1.0em;
-      background-color: #d4cb99;
+      background-color: #cab8ad;
       font-family: Helvetica, Arial, FreeSans, san-serif;
       color: #000000;
     }
@@ -18,60 +17,164 @@
     }
     h1 { font-size: 3.8em; color: #2b3466; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #2b3466; }
-    h3 { text-align: center; color: #2b3466; }
+    h1 a { text-decoration: none; }
+    h2 { font-size: 1.5em; color: #2b3466; margin-top: 40px; }
+    h3 { color: #2b3466; font-weight: normal; }
     a { color: #2b3466; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
+    .download { float: right; margin-top: 20px; margin-right: 20px; }
+    pre { background: #000; color: #fff; padding: 15px; }
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa; }
+    .footer { text-align: center; padding-top: 30px; font-style: italic; }
+  /*]]>*/
   </style>
 </head>
 
 <body>
-  <a href="http://github.com/christophlsa/OVGU-Noten-Grabber"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  <a href="http://github.com/christophlsa/OVGU-Noten-Grabber"><img
+    style="position: absolute; top: 0; right: 0; border: 0;"
+    src="forkmeifyoucan.png"
+    alt="Fork me on GitHub" /></a>
 
   <div id="container">
-
     <div class="download">
-      <a href="http://github.com/christophlsa/OVGU-Noten-Grabber/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/christophlsa/OVGU-Noten-Grabber/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+      <a href="http://github.com/christophlsa/OVGU-Noten-Grabber/downloads"><img
+        border="0" width="170" height="42" src="download.png" /></a>
     </div>
 
-    <h1><a href="http://github.com/christophlsa/OVGU-Noten-Grabber">OVGU-Noten-Grabber</a>
-      <span class="small">by <a href="http://github.com/christophlsa">christophlsa</a></span></h1>
+    <h1><a href=
+    "http://github.com/christophlsa/OVGU-Noten-Grabber">OVGU-Noten-Grabber</a>
+    <span class="small">by <a href=
+    "http://github.com/christophlsa">Christoph Giesel</a></span></h1>
 
     <div class="description">
-      Ein kleines Konsolenprogramm, welches von der Prüfungsnotenverwaltung "Hisqis" von der Otto-von-Guericke Universität Magdeburg die Noten holt und sie darstellt.
+      Ein kleines Konsolenprogramm, welches von der Pr&uuml;fungsnotenverwaltung "Hisqis" von
+      der Otto-von-Guericke Universit&auml;t Magdeburg die Noten holt und sie darstellt.
     </div>
 
-    <h2>Authors</h2>
-<p>Christoph Giesel (mail@cgiesel.de)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Christoph Giesel (mail@cgiesel.de)<br/>      </p>
+    <h2>Benutzung</h2>
 
+    <h3>Download</h3>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/christophlsa/OVGU-Noten-Grabber/zipball/master">zip</a> or
-      <a href="http://github.com/christophlsa/OVGU-Noten-Grabber/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/christophlsa/OVGU-Noten-Grabber</pre>
-    </p>
+    <p>Als aller erstes wird die Jar ben&ouml;tigt. Lade dazu entweder die aktuellste Version
+    von <a href=
+    "https://github.com/christophlsa/OVGU-Noten-Grabber/downloads">https://github.com/christophlsa/OVGU-Noten-Grabber/downloads</a>
+    herunter und entpacke diese. Im Hauptverzeichnis ist die
+    <strong>HisqisNoten.jar</strong> enthalten (zur Ausf&uuml;hrung werden die anderen Dateien
+    nicht ben&ouml;tigt).</p>
+
+    <p>Oder hole dir den aktuellsten Quellcode mit dem Versionsverwaltungstool
+    <strong>git</strong>:</p>
+    <pre><code>git clone git://github.com/christophlsa/OVGU-Noten-Grabber.git</code></pre>
+
+    <p>Wenn du letzte Variante bevorzugst, so musst du noch den Quellcode kompilieren
+    (siehe Abschnitt <strong><em>Kompilieren</em></strong>).</p>
+
+    <h3>Ausf&uuml;hren</h3>
+
+    <p>Im selben Verzeichnis wie die Jar-Datei, rufst du</p>
+    <pre><code>java -jar HisqisNoten.jar -u &lt;user&gt; -p &lt;pass&gt;</code></pre>
+
+    <p>auf, wobei du <strong>user</strong> und <strong>pass</strong> durch die Hisqis
+    Login Daten ersetzen musst (ohne &lt;&gt;). Du kannst auch die Login Daten weglassen
+    und du wirst beim Ausf&uuml;hren aufgefordert diese anzugeben.</p>
+
+    <h3>Parameter</h3>
+    <pre><code>-c,--console      Konsolen Modus (standardm&auml;&szlig;ig wird eine GUI benutzt)
+-h,--help         zeigt diese Parameter an
+-p,--pass &lt;arg&gt;   Passwort f&uuml;r Hisqis
+-u,--user &lt;arg&gt;   Benutzername f&uuml;r Hisqis</code></pre>
+
+    <h2>Entwickeln</h2>
+
+    <p>Dies ist ein Eclipse Java Projekt. Wer dies in einer anderen IDE entwickeln
+    m&ouml;chte, muss die Quelldateien aus dem Verzeichnis <strong>src</strong> nehmen.</p>
+
+    <h2>Kompilieren</h2>
+
+    <p><strong>Voraussetzungen:</strong></p>
+
+    <ul>
+      <li>
+        <p>Java JDK 1.6 oder h&ouml;her (<a href=
+        "http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>)</p>
+      </li>
+
+      <li>
+        <p>Apache Ant (<a href="http://ant.apache.org">http://ant.apache.org</a>)</p>
+      </li>
+
+      <li>
+        <p><em>optional:</em> Eclipse (<a href=
+        "http://www.eclipse.org">http://www.eclipse.org</a>)</p>
+      </li>
+    </ul>
+
+    <h3>Eclipse</h3>
+
+    <p>Einfach das Projekt importieren, im Projektverzeichnis auf der Kommandozeile</p>
+    <pre><code>ant resolve</code></pre>
+
+    <p>aufrufen und in Eclipse normal arbeiten.</p>
+
+    <h3>ANT Build</h3>
+
+    <p>Im Projekt Verzeichnis <strong>ant</strong> ausf&uuml;hren. Daraufhin wird im Ordner
+    <strong>dist</strong> die Datei <strong>HisqisNoten.jar</strong> erstellt.</p>
+
+    <p><strong>Build Targets:</strong></p>
+
+    <ul>
+      <li><strong>init</strong> :: erstellt die ben&ouml;tigten Ordner</li>
+
+      <li><strong>resolve</strong> :: holt automatisch die notwendigen
+      Abh&auml;ndigkeiten</li>
+
+      <li><strong>compile</strong> :: erstellt im Ordner <em>build</em> die class
+      Dateien</li>
+
+      <li><strong>build</strong> :: erstellt die Jar Datei im Ordner <em>dist</em></li>
+
+      <li><strong>doc</strong> :: erstellt die Javadoc Dateien im Ordner
+      <em>doc</em></li>
+
+      <li><strong>dist</strong> :: kopiert die erstellten Dateien und den Quellcode in
+      den Ordner <em>dist</em> und erstellt eine komprimiertes Tar Archiv.</li>
+
+      <li><strong>clean</strong> :: l&ouml;scht alle erstellten Ordner</li>
+    </ul>
+
+    <h2>Probleme</h2>
+
+    <h3>SSL Exception</h3>
+
+    <p>Derzeit gibt es noch Probleme mit den SSL Zertifikaten. Wer von diesem Problem
+    betroffen ist, bekommt eine unbehandelte Exception.</p>
+
+    <p><strong>UPDATE:</strong> Wahrscheinlich ist der Bug jetzt gefixt. Bitte melden,
+    falls der Fehler noch auftritt.</p>
+
+    <h2>Lizenz</h2>
+
+    <p>Copyright (C) 2010-2011 Christoph Giesel</p>
+
+    <p>This program is free software: you can redistribute it and/or modify it under the
+    terms of the GNU General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.</p>
+
+    <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+
+    <p>You should have received a copy of the GNU General Public License along with this
+    program. If not, see <a href=
+    "http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
 
     <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/christophlsa/OVGU-Noten-Grabber">christophlsa/OVGU-Noten-Grabber</a>
+      get the source code on GitHub : <a href=
+      "http://github.com/christophlsa/OVGU-Noten-Grabber">christophlsa/OVGU-Noten-Grabber</a>
     </div>
-
   </div>
-
-  
 </body>
 </html>
+
