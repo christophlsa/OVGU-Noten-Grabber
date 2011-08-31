@@ -30,9 +30,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -116,18 +119,33 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
         setLocationRelativeTo(null);
         setVisible(true);
         
-        if (username == null || password == null) {
+        this.username = username;
+    	this.password = password;
+    	
+    	if (GregorianCalendar.getInstance(TimeZone.getTimeZone("CET")).get(GregorianCalendar.HOUR_OF_DAY) == 2) {
+			int result = JOptionPane.showConfirmDialog(this, "Es ist zwischen 2 und 3 Uhr. Laut Webseite sollten derzeit Wartungsarbeiten laufen.\n\nTrotztdem weitermachen?", "eventuelle Wartungsarbeiten", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			
+			if (result == JOptionPane.NO_OPTION) {
+				System.exit(0);
+			}
+    	}
+    	
+    	process(false);
+	}
+	
+	public void process(boolean forceLoginDialog) {
+		if (username == null || password == null || forceLoginDialog) {
         	String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, username, password);
         	
-        	this.username = loginData[0];
-        	this.password = loginData[1];
-        } else {
-        	this.username = username;
-        	this.password = password;
+        	username = loginData[0];
+        	password = loginData[1];
         }
+		
+		grabber = new HisqisGUIGrabber(this.username, this.password);
+		grabber.addPropertyChangeListener(this);
         
-        grabber = new HisqisGUIGrabber(this.username, this.password);
-        grabber.addPropertyChangeListener(this);
+        grabber.setUser(username);
+        grabber.setPassword(password);
 
         grabber.execute();
 	}
@@ -140,6 +158,14 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener {
 			}
 			
 			if(grabber.isDone()) {
+				if (grabber.isCancelled()) {
+					grabber.removePropertyChangeListener(this);
+					
+					JOptionPane.showMessageDialog(this, "Username or Password are wrong.", "Login failed", JOptionPane.ERROR_MESSAGE);
+					process(true);
+					return;
+				}
+				
 				try {
 					HisqisGrabberResults results = grabber.get();
 					

@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.security.auth.login.LoginException;
 
 /**
  * 
@@ -141,7 +142,7 @@ public class HisqisGrabber {
 		return true;
 	}
 
-	public HisqisGrabberResults process() {
+	public HisqisGrabberResults process() throws LoginException {
 		try {
 			init();
 			
@@ -151,6 +152,8 @@ public class HisqisGrabber {
 			URL url4 = doStep4(url3);
 			URL url5 = doStep5(url4);
 			doStep6(url5);
+		} catch (LoginException e) {
+			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -181,8 +184,9 @@ public class HisqisGrabber {
 	 * @return URL to second page
 	 * @throws IOException
 	 *             invalid URL or I/O Error
+	 * @throws LoginException 
 	 */
-	protected URL doStep2(URL referer) throws IOException {
+	protected URL doStep2(URL referer) throws IOException, LoginException {
 		URL url = new URL(LOGINPAGEURL);
 		URLConnection inputConnection = url.openConnection();
 
@@ -198,6 +202,10 @@ public class HisqisGrabber {
 		InputStream inputResponseStream = inputConnection.getInputStream();
 
 		String responseContent = new Scanner(inputResponseStream).useDelimiter("\\Z").next();
+		
+		if (responseContent.contains("Falscher Benutzername oder Passwort")) {
+			throw new LoginException("Login failed.");
+		}
 
 		Matcher relaystateMatcher = relaystatePattern.matcher(responseContent);
 		relaystateMatcher.find();

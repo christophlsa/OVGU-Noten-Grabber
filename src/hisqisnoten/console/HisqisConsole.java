@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.security.auth.login.LoginException;
+
 /**
  * 
  * @author Christoph Giesel
@@ -71,7 +73,14 @@ public class HisqisConsole {
         System.out.println();
 
         HisqisGrabber grabber = new HisqisGrabber(this.username, this.password);
-        HisqisGrabberResults results = grabber.process();
+        
+        HisqisGrabberResults results = null;
+		try {
+			results = grabber.process();
+		} catch (LoginException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
         
         ArrayList<HQNContainer> marks = results.getMarks();
             

@@ -18,6 +18,7 @@ package hisqisnoten;
 
 import java.net.URL;
 
+import javax.security.auth.login.LoginException;
 import javax.swing.SwingWorker;
 
 public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> {
@@ -44,6 +45,9 @@ public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> 
 			setProgress(5);
 			grabber.doStep6(url5);
 			setProgress(6);
+		} catch (LoginException e) {
+			setProgress(0);
+			cancel(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -55,5 +59,33 @@ public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> 
 	@Override
 	protected HisqisGrabberResults doInBackground() throws Exception {
 		return process();
+	}
+	
+	/**
+	 * @return the username
+	 */
+	public String getUser() {
+		return grabber.user;
+	}
+
+	/**
+	 * @param user the username to set
+	 */
+	public void setUser(String user) {
+		grabber.user = user;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return grabber.password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		grabber.password = password;
 	}
 }
