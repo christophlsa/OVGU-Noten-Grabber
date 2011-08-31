@@ -142,10 +142,15 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener, ActionL
 		syncButton.setEnabled(false);
 
 		if (username == null || password == null || forceLoginDialog) {
-			String[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, username, password);
+			Object[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, username, password);
 
-			username = loginData[0];
-			password = loginData[1];
+			if (!(Boolean) loginData[0] || loginData.length != 3) {
+				syncButton.setEnabled(true);
+				return;
+			}
+
+			username = (String) loginData[1];
+			password = (String) loginData[2];
 		}
 
 		grabber = new HisqisGUIGrabber(this.username, this.password);

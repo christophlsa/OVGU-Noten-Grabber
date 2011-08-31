@@ -40,70 +40,70 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 	 * I don't know why but Eclipse expects a version id.
 	 */
 	private static final long serialVersionUID = -8581833520024767430L;
-	
+
 	JLabel labelUsername;
 	JTextField textfieldUsername;
 	JLabel labelPassword;
 	JPasswordField passwordfieldPassword;
 	JButton buttonLogin;
-	
+
 	boolean success = false;
 
 	public HisqisLoginDataDialog(JFrame parent, String username, String password) {
 		super(parent, "Login Data", true);
-		
+
 		JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints cs = new GridBagConstraints();
+		GridBagConstraints cs = new GridBagConstraints();
 
-        cs.fill = GridBagConstraints.HORIZONTAL;
+		cs.fill = GridBagConstraints.HORIZONTAL;
 
-        labelUsername = new JLabel("Username: ");
-        cs.gridx = 0;
-        cs.gridy = 0;
-        cs.gridwidth = 1;
-        panel.add(labelUsername, cs);
+		labelUsername = new JLabel("Username: ");
+		cs.gridx = 0;
+		cs.gridy = 0;
+		cs.gridwidth = 1;
+		panel.add(labelUsername, cs);
 
-        textfieldUsername = new JTextField(20);
-        textfieldUsername.addKeyListener(this);
-        cs.gridx = 1;
-        cs.gridy = 0;
-        cs.gridwidth = 2;
-        panel.add(textfieldUsername, cs);
-        
-        if (username != null)
-        	textfieldUsername.setText(username);
+		textfieldUsername = new JTextField(20);
+		textfieldUsername.addKeyListener(this);
+		cs.gridx = 1;
+		cs.gridy = 0;
+		cs.gridwidth = 2;
+		panel.add(textfieldUsername, cs);
 
-        labelPassword = new JLabel("Password: ");
-        cs.gridx = 0;
-        cs.gridy = 1;
-        cs.gridwidth = 1;
-        panel.add(labelPassword, cs);
+		if (username != null)
+			textfieldUsername.setText(username);
 
-        passwordfieldPassword = new JPasswordField(20);
-        passwordfieldPassword.addKeyListener(this);
-        cs.gridx = 1;
-        cs.gridy = 1;
-        cs.gridwidth = 2;
-        panel.add(passwordfieldPassword, cs);
-        panel.setBorder(new LineBorder(Color.GRAY));
+		labelPassword = new JLabel("Password: ");
+		cs.gridx = 0;
+		cs.gridy = 1;
+		cs.gridwidth = 1;
+		panel.add(labelPassword, cs);
 
-        if (password != null)
-        	passwordfieldPassword.setText(password);
-        
-        buttonLogin = new JButton("Login");
-        
-        buttonLogin.addActionListener(this);
-        
-        getContentPane().add(panel, BorderLayout.CENTER);
-        getContentPane().add(buttonLogin, BorderLayout.PAGE_END);
+		passwordfieldPassword = new JPasswordField(20);
+		passwordfieldPassword.addKeyListener(this);
+		cs.gridx = 1;
+		cs.gridy = 1;
+		cs.gridwidth = 2;
+		panel.add(passwordfieldPassword, cs);
+		panel.setBorder(new LineBorder(Color.GRAY));
 
-        pack();
-        setResizable(false);
-        setLocationRelativeTo(parent);
-        
-        setVisible(true);
+		if (password != null)
+			passwordfieldPassword.setText(password);
+
+		buttonLogin = new JButton("Login");
+
+		buttonLogin.addActionListener(this);
+
+		getContentPane().add(panel, BorderLayout.CENTER);
+		getContentPane().add(buttonLogin, BorderLayout.PAGE_END);
+
+		pack();
+		setResizable(false);
+		setLocationRelativeTo(parent);
+
+		setVisible(true);
 	}
-	
+
 	public void done() {
 		success = true;
 		dispose();
@@ -114,7 +114,7 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 		if (event.getSource().equals(buttonLogin)) {
 			done();
 		}
-		
+
 	}
 
 	@Override
@@ -131,16 +131,17 @@ public class HisqisLoginDataDialog extends JDialog implements ActionListener, Ke
 	@Override
 	public void keyTyped(KeyEvent event) {
 	}
-	
-	public static String[] getLoginDataViaDialog(JFrame parent, String username, String password) {
+
+	public static Object[] getLoginDataViaDialog(JFrame parent, String username, String password) {
 		HisqisLoginDataDialog dialog = new HisqisLoginDataDialog(parent, username, password);
-		
+
 		if(!dialog.success)
-			System.exit(1);
-		
-		return new String[] {
-					dialog.textfieldUsername.getText().trim(),
-					String.valueOf(dialog.passwordfieldPassword.getPassword()).trim()
-				};
+			return new Boolean[] { false };
+
+		return new Object[] {
+				true,
+				dialog.textfieldUsername.getText().trim(),
+				String.valueOf(dialog.passwordfieldPassword.getPassword()).trim()
+		};
 	}
 }
