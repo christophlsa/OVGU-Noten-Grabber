@@ -34,21 +34,21 @@ import javax.security.auth.login.LoginException;
  *
  */
 public class HisqisConsole {
-	
+
 	static final String GETUSERNAME = "Enter Username: ";
 	static final String GETPASSWORD = "Enter Password: ";
 	static final String outputFormat = "%-60s | %-10s | %-4s | %3s | %s";
-	
+
 	private String username;
 	private String password;
 
 	public HisqisConsole(String user, String password) {
 		this.username = user;
 		this.password = password;
-		
+
 		if (this.username == null || this.password == null) {
 			Console console = System.console();
-			
+
 			if (console != null) {
 				if (this.username == null)
 					this.username = String.valueOf(console.readLine(GETUSERNAME)).trim();
@@ -57,51 +57,51 @@ public class HisqisConsole {
 			} else {
 				Scanner sc = new Scanner(System.in);
 				if (this.username == null) {
-				    System.out.print(GETUSERNAME);
-				    this.username = sc.next().trim();
+					System.out.print(GETUSERNAME);
+					this.username = sc.next().trim();
 				}
 				if (this.password == null) {
-				    System.out.print(GETPASSWORD);
-				    this.password = sc.next().trim();
+					System.out.print(GETPASSWORD);
+					this.password = sc.next().trim();
 				}
 			}
 		}
 
-        System.out.println();
-		
-		System.out.println("Bitte warten. Dies kann ein paar Sekunden dauern...");
-        System.out.println();
+		System.out.println();
 
-        HisqisGrabber grabber = new HisqisGrabber(this.username, this.password);
-        
-        HisqisGrabberResults results = null;
+		System.out.println("Bitte warten. Dies kann ein paar Sekunden dauern...");
+		System.out.println();
+
+		HisqisGrabber grabber = new HisqisGrabber(this.username, this.password);
+
+		HisqisGrabberResults results = null;
 		try {
 			results = grabber.process();
 		} catch (LoginException e) {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
-        
-        ArrayList<HQNContainer> marks = results.getMarks();
-            
-        // nach Semester sortieren
-        Collections.sort(marks, new HQNContainerComparator());
 
-        System.out.printf(outputFormat, "Fach", "Semester", "Note", "CP", "Bestanden");
-        System.out.println();
-        System.out.println("--------------------------------------------"
-                + "----------------------------------------------------------");
-        
-        for (HQNContainer hqnc : marks) {
-            System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getCreditpoints(), hqnc.getBestanden());
-            System.out.println();
-        }
-        
-        System.out.println("--------------------------------------------"
-                + "----------------------------------------------------------");
-        
-        System.out.printf(outputFormat, "total", "", results.getAverageGrade(), results.getTotalCreditPoints(), "");
-        System.out.println();
+		ArrayList<HQNContainer> marks = results.getMarks();
+
+		// nach Semester sortieren
+		Collections.sort(marks, new HQNContainerComparator());
+
+		System.out.printf(outputFormat, "Fach", "Semester", "Note", "CP", "Bestanden");
+		System.out.println();
+		System.out.println("--------------------------------------------"
+				+ "----------------------------------------------------------");
+
+		for (HQNContainer hqnc : marks) {
+			System.out.printf(outputFormat, hqnc.getFach(), hqnc.getSemester(), hqnc.getNote(), hqnc.getCreditpoints(), hqnc.getBestanden());
+			System.out.println();
+		}
+
+		System.out.println("--------------------------------------------"
+				+ "----------------------------------------------------------");
+
+		System.out.printf(outputFormat, "total", "", results.getAverageGrade(), results.getTotalCreditPoints(), "");
+		System.out.println();
 	}
-	
+
 }

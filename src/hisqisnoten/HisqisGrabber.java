@@ -65,15 +65,15 @@ public class HisqisGrabber {
 	static final Pattern tdPattern = Pattern.compile("<td (.+?)>(.+?)<\\/td>", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern htmlCommentPattern = Pattern.compile("<!--(.+?)-->", Pattern.MULTILINE | Pattern.DOTALL);
 	static final Pattern commaZeroPattern = Pattern.compile(",0");
-	
+
 	protected String relaystate = "";
 	protected String samlresponse = "";
 	protected String asi = "";
 	protected String studyCourseURL = "";
-	
+
 	protected String averageGrade = "";
 	protected String totalCreditPoints = "";
-	
+
 	protected ArrayList<HQNContainer> marks;
 
 	public HisqisGrabber() {
@@ -87,10 +87,10 @@ public class HisqisGrabber {
 		prepareCookies();
 
 		prepareSSL();
-		
+
 		init();
 	}
-	
+
 	public void init() {
 		relaystate = "";
 		samlresponse = "";
@@ -145,7 +145,7 @@ public class HisqisGrabber {
 	public HisqisGrabberResults process() throws LoginException {
 		try {
 			init();
-			
+
 			URL url1 = doStep1();
 			URL url2 = doStep2(url1);
 			URL url3 = doStep3(url2);
@@ -158,7 +158,7 @@ public class HisqisGrabber {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return new HisqisGrabberResults(averageGrade, totalCreditPoints, marks);
 	}
 
@@ -202,7 +202,7 @@ public class HisqisGrabber {
 		InputStream inputResponseStream = inputConnection.getInputStream();
 
 		String responseContent = new Scanner(inputResponseStream).useDelimiter("\\Z").next();
-		
+
 		if (responseContent.contains("Falscher Benutzername oder Passwort")) {
 			throw new LoginException("Login failed.");
 		}
@@ -252,22 +252,22 @@ public class HisqisGrabber {
 	 * @throws IOException
 	 */
 	protected URL doStep4(URL referer) throws IOException {
-        URL url = new URL(STARTPAGEURL);
-        URLConnection inputStream = url.openConnection();
-        
-        inputStream.setRequestProperty("Referer", referer.toExternalForm());
-        
-        InputStream responseStream = inputStream.getInputStream();
+		URL url = new URL(STARTPAGEURL);
+		URLConnection inputStream = url.openConnection();
 
-        String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
+		inputStream.setRequestProperty("Referer", referer.toExternalForm());
 
-        Matcher asiMatcher = asiPattern.matcher(responseContent);
-        asiMatcher.find();
-        asi = asiMatcher.group(1);
-        
-        return url;
+		InputStream responseStream = inputStream.getInputStream();
+
+		String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
+
+		Matcher asiMatcher = asiPattern.matcher(responseContent);
+		asiMatcher.find();
+		asi = asiMatcher.group(1);
+
+		return url;
 	}
-	
+
 	/**
 	 * overview of study courses
 	 * 
@@ -276,22 +276,22 @@ public class HisqisGrabber {
 	 * @throws IOException
 	 */
 	protected URL doStep5(URL referer) throws IOException {
-        URL url = new URL(STUDYCOURSESURL + URLEncoder.encode(asi, "UTF-8"));
-        URLConnection inputStream = url.openConnection();
-        
-        inputStream.setRequestProperty("Referer", referer.toExternalForm());
-        
-        InputStream responseStream = inputStream.getInputStream();
+		URL url = new URL(STUDYCOURSESURL + URLEncoder.encode(asi, "UTF-8"));
+		URLConnection inputStream = url.openConnection();
 
-        String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
+		inputStream.setRequestProperty("Referer", referer.toExternalForm());
 
-        Matcher studeCourseMatcher = studyCoursePattern.matcher(responseContent);
-        studeCourseMatcher.find();
-        studyCourseURL = studeCourseMatcher.group(1).replaceAll("&amp;", "&");
-        
-        return url;
+		InputStream responseStream = inputStream.getInputStream();
+
+		String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
+
+		Matcher studeCourseMatcher = studyCoursePattern.matcher(responseContent);
+		studeCourseMatcher.find();
+		studyCourseURL = studeCourseMatcher.group(1).replaceAll("&amp;", "&");
+
+		return url;
 	}
-	
+
 	/**
 	 * marks overview
 	 * 
@@ -300,65 +300,65 @@ public class HisqisGrabber {
 	 * @throws IOException
 	 */
 	protected URL doStep6(URL referer) throws IOException {
-        URL url = new URL(studyCourseURL);
-        URLConnection inputStream = url.openConnection();
-        
-        inputStream.setRequestProperty("Referer", referer.toExternalForm());
-        
-        InputStream responseStream = inputStream.getInputStream();
+		URL url = new URL(studyCourseURL);
+		URLConnection inputStream = url.openConnection();
 
-        String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
+		inputStream.setRequestProperty("Referer", referer.toExternalForm());
 
-        Matcher tableMatcher = tablePattern.matcher(responseContent);
-        tableMatcher.find();
-        final String table = tableMatcher.group(1);
+		InputStream responseStream = inputStream.getInputStream();
 
-        Matcher marksMatcher = marksPattern.matcher(table);
+		String responseContent = new Scanner(responseStream).useDelimiter("\\Z").next();
 
-        marks = new ArrayList<HQNContainer>();
+		Matcher tableMatcher = tablePattern.matcher(responseContent);
+		tableMatcher.find();
+		final String table = tableMatcher.group(1);
 
-        marksMatcher.find();
-        marksMatcher.find();
+		Matcher marksMatcher = marksPattern.matcher(table);
 
-        while (marksMatcher.find()) {
-            Matcher tdMatcher = tdPattern.matcher(htmlCommentPattern.matcher(marksMatcher.group(1)).replaceAll(""));
-            tdMatcher.find();
+		marks = new ArrayList<HQNContainer>();
 
-            if (tdMatcher.group().contains("<b>")) {
-            	tdMatcher.find();
-            	if (tdMatcher.group(2).contains("Durchschnittsnote")) {
-            		tdMatcher.find();
-            		averageGrade = tdMatcher.group(2).trim();
-            		
-            		tdMatcher.find();
-            		tdMatcher.find();
-            		totalCreditPoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
-            	}
-            	
-                continue;
-            }
+		marksMatcher.find();
+		marksMatcher.find();
 
-            tdMatcher.find();
-            String subject = tdMatcher.group(2).trim();
+		while (marksMatcher.find()) {
+			Matcher tdMatcher = tdPattern.matcher(htmlCommentPattern.matcher(marksMatcher.group(1)).replaceAll(""));
+			tdMatcher.find();
 
-            tdMatcher.find();
-            String term = tdMatcher.group(2).trim();
+			if (tdMatcher.group().contains("<b>")) {
+				tdMatcher.find();
+				if (tdMatcher.group(2).contains("Durchschnittsnote")) {
+					tdMatcher.find();
+					averageGrade = tdMatcher.group(2).trim();
 
-            tdMatcher.find();
-            String mark = htmlCommentPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
-            
-            tdMatcher.find();
-            String passed = tdMatcher.group(2).trim();
-            
-            tdMatcher.find();
-            String creditpoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
+					tdMatcher.find();
+					tdMatcher.find();
+					totalCreditPoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
+				}
 
-            marks.add(new HQNContainer(subject, term, mark, passed, creditpoints));
-        }
-        
-        return url;
+				continue;
+			}
+
+			tdMatcher.find();
+			String subject = tdMatcher.group(2).trim();
+
+			tdMatcher.find();
+			String term = tdMatcher.group(2).trim();
+
+			tdMatcher.find();
+			String mark = htmlCommentPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
+
+			tdMatcher.find();
+			String passed = tdMatcher.group(2).trim();
+
+			tdMatcher.find();
+			String creditpoints = commaZeroPattern.matcher(tdMatcher.group(2)).replaceAll("").trim();
+
+			marks.add(new HQNContainer(subject, term, mark, passed, creditpoints));
+		}
+
+		return url;
 	}
-	
+
 	/**
 	 * @return the username
 	 */

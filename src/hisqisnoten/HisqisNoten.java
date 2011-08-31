@@ -32,37 +32,37 @@ import hisqisnoten.gui.HisqisGUI;
  *
  */
 public class HisqisNoten {
-	
+
 	public static Options options;
-    
-    public static void main(String[] args) {
-        options = new Options();
-        options.addOption("h", "help", false, "this help");
-        options.addOption("u", "user", true, "username for hisqis");
-        options.addOption("p", "pass", true, "password for hisqis");
-        options.addOption("c", "console", false, "console mode instead of gui mode");
-        
-        CommandLineParser parser = new PosixParser();
-        
-        try {
+
+	public static void main(String[] args) {
+		options = new Options();
+		options.addOption("h", "help", false, "this help");
+		options.addOption("u", "user", true, "username for hisqis");
+		options.addOption("p", "pass", true, "password for hisqis");
+		options.addOption("c", "console", false, "console mode instead of gui mode");
+
+		CommandLineParser parser = new PosixParser();
+
+		try {
 			CommandLine cmdline = parser.parse(options, args);
-			
+
 			if (cmdline.hasOption("help")) {
 				printHelp();
 				System.exit(0);
 			}
-			
+
 			if (cmdline.getArgList().size() != 0) {
 				System.err.println("Please use the new commandline options.");
 				System.out.println();
-				
+
 				printHelp();
 				System.exit(1);
 			}
-			
+
 			String user = cmdline.getOptionValue("user", null);
 			String pass = cmdline.getOptionValue("pass", null);
-			
+
 			if (cmdline.hasOption("console")) {
 				new HisqisConsole(user, pass);
 			} else {
@@ -71,10 +71,10 @@ public class HisqisNoten {
 		} catch (ParseException e) {
 			printHelp();
 		}
-    }
-    
-    public static void printHelp() {
-    	HelpFormatter formatter = new HelpFormatter();
+	}
+
+	public static void printHelp() {
+		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("java -jar HisqisNoten.jar", options);
-    }
+	}
 }

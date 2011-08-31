@@ -24,15 +24,15 @@ import javax.swing.SwingWorker;
 public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> {
 
 	HisqisGrabber grabber;
-	
+
 	public HisqisGUIGrabber(String user, String password) {
 		grabber = new HisqisGrabber(user, password);
 	}
-	
+
 	public HisqisGrabberResults process() {
 		try {
 			grabber.init();
-			
+
 			URL url1 = grabber.doStep1();
 			setProgress(1);
 			URL url2 = grabber.doStep2(url1);
@@ -52,7 +52,7 @@ public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> 
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return new HisqisGrabberResults(grabber.averageGrade, grabber.totalCreditPoints, grabber.marks);
 	}
 
@@ -60,7 +60,7 @@ public class HisqisGUIGrabber extends SwingWorker<HisqisGrabberResults, Object> 
 	protected HisqisGrabberResults doInBackground() throws Exception {
 		return process();
 	}
-	
+
 	/**
 	 * @return the username
 	 */

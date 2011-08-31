@@ -19,11 +19,11 @@ package hisqisnoten;
 import java.util.ArrayList;
 
 public class HisqisGrabberResults {
-	
+
 	protected String averageGrade;
 	protected String totalCreditPoints;
 	protected ArrayList<HQNContainer> marks;
-	
+
 	public HisqisGrabberResults(String averageGrade, String totalCreditPoints, ArrayList<HQNContainer> marks) {
 		this.averageGrade = averageGrade;
 		this.totalCreditPoints = totalCreditPoints;
