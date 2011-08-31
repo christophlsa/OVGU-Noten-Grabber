@@ -25,6 +25,8 @@ import hisqisnoten.gui.dialog.HisqisLoginDataDialog;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -66,6 +69,15 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener, ActionL
 
 	public HisqisGUI(String username, String password) {
 		super();
+
+		ArrayList<Image> iconList = new ArrayList<Image>();
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program16px.png")).getImage());
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program24px.png")).getImage());
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program32px.png")).getImage());
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program48px.png")).getImage());
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program64px.png")).getImage());
+		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program128px.png")).getImage());
+		setIconImages(iconList);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 500);

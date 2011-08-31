@@ -74,6 +74,9 @@
     <copy todir="${dist}/lib">
       <fileset dir="${lib}" />
     </copy>
+    <copy todir="${dist}/svgs">
+      <fileset dir="svgs" />
+    </copy>
     <copy todir="${dist}" flatten="true">
       <resources>
         <file file="README.md"/>
