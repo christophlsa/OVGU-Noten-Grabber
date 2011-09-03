@@ -35,7 +35,12 @@
   </target>
   
   <target name="build" depends="compile">
-    <unjar src="${lib}/commons-cli-1.2.jar" dest="${build}">
+    <unjar dest="${build}">
+      <fileset dir="${lib}">
+        <include name="**/*.jar"/>
+        <exclude name="**/*source*.jar"/>
+        <exclude name="**/*javadoc*.jar"/>
+      </fileset>
       <patternset>
         <include name="**/*.class"/>
       </patternset>
