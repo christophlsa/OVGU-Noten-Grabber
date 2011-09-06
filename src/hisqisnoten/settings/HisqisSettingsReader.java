@@ -18,10 +18,19 @@ package hisqisnoten.settings;
 
 import hisqisnoten.HQNContainer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 public class HisqisSettingsReader {
 
@@ -69,6 +78,23 @@ public class HisqisSettingsReader {
 		}
 
 		return settings;
+	}
+
+	public static HisqisSettings loadDocument(File res) {
+		try {
+			Document document = new SAXBuilder().build(res);
+
+			HisqisSettings settings = parseDocument(document);
+			settings.configpathUsed = res;
+
+			return settings;
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		} catch (JDOMException e) {
+			return null;
+		}
 	}
 
 }

@@ -20,6 +20,7 @@ import hisqisnoten.HQNContainer;
 import hisqisnoten.HQNContainerComparator;
 import hisqisnoten.HisqisGrabber;
 import hisqisnoten.HisqisGrabberResults;
+import hisqisnoten.settings.HisqisSettings;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -39,30 +40,26 @@ public class HisqisConsole {
 	static final String GETPASSWORD = "Enter Password: ";
 	static final String outputFormat = "%-60s | %-10s | %-4s | %3s | %s";
 
-	private String username;
-	private String password;
+	private HisqisSettings settings;
 
-	public HisqisConsole(String user, String password) {
-		this.username = user;
-		this.password = password;
-
-		if (this.username == null || this.password == null) {
+	public HisqisConsole(HisqisSettings settings) {
+		if (settings.username == null || settings.password == null) {
 			Console console = System.console();
 
 			if (console != null) {
-				if (this.username == null)
-					this.username = String.valueOf(console.readLine(GETUSERNAME)).trim();
-				if (this.password == null)
-					this.password = String.valueOf(console.readPassword(GETPASSWORD)).trim();
+				if (settings.username == null)
+					settings.username = String.valueOf(console.readLine(GETUSERNAME)).trim();
+				if (settings.password == null)
+					settings.password = String.valueOf(console.readPassword(GETPASSWORD)).trim();
 			} else {
 				Scanner sc = new Scanner(System.in);
-				if (this.username == null) {
+				if (settings.username == null) {
 					System.out.print(GETUSERNAME);
-					this.username = sc.next().trim();
+					settings.username = sc.next().trim();
 				}
-				if (this.password == null) {
+				if (settings.password == null) {
 					System.out.print(GETPASSWORD);
-					this.password = sc.next().trim();
+					settings.password = sc.next().trim();
 				}
 			}
 		}
@@ -72,7 +69,7 @@ public class HisqisConsole {
 		System.out.println("Bitte warten. Dies kann ein paar Sekunden dauern...");
 		System.out.println();
 
-		HisqisGrabber grabber = new HisqisGrabber(this.username, this.password);
+		HisqisGrabber grabber = new HisqisGrabber(settings.username, settings.password);
 
 		HisqisGrabberResults results = null;
 		try {
