@@ -18,11 +18,18 @@ package hisqisnoten.settings;
 
 import hisqisnoten.HQNContainer;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class HisqisSettings {
 
 	public static final String VERSION = "0.4.0";
+
+	public static final String CONFIGNAME = "ovgugrabber.xml";
+
+	public static ArrayList<File> configpath = new ArrayList<File>();
+
+	public File configpathUsed;
 
 	public String username;
 
@@ -37,5 +44,21 @@ public class HisqisSettings {
 	public String totalCreditPoints;
 
 	public boolean saveMarks = false;
+
+	public static void genConfigPath() {
+		configpath.clear();
+
+		// working path
+		configpath.add(new File(CONFIGNAME));
+
+		// same path as jar
+		configpath.add(new File(
+				new File(HisqisSettings.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent(),
+				CONFIGNAME
+		));
+
+		// user home path
+		configpath.add(new File(new File(System.getProperty("user.home")), CONFIGNAME));
+	}
 
 }
