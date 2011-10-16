@@ -21,13 +21,13 @@ import hisqisnoten.HQNContainerComparator;
 import hisqisnoten.HisqisGUIGrabber;
 import hisqisnoten.HisqisGrabberResults;
 import hisqisnoten.gui.dialog.HisqisLoginDataDialog;
+import hisqisnoten.settings.HisqisSettings;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
@@ -66,13 +66,14 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener, ActionL
 	
 	ArrayList<Image> iconList = new ArrayList<Image>();
 
-	private String username;
-	private String password;
+	private HisqisSettings settings;
 
 	HisqisGUIGrabber grabber;
 
-	public HisqisGUI(String username, String password) {
+	public HisqisGUI(HisqisSettings settings) {
 		super();
+
+		this.settings = settings;
 
 		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program16px.png")).getImage());
 		iconList.add(new ImageIcon(Class.class.getResource("/resources/images/program24px.png")).getImage());
@@ -141,9 +142,6 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener, ActionL
 		
 		initSysTray();
 
-		this.username = username;
-		this.password = password;
-
 		if (GregorianCalendar.getInstance(TimeZone.getTimeZone("CET")).get(GregorianCalendar.HOUR_OF_DAY) == 2) {
 			int result = JOptionPane.showConfirmDialog(this, "Es ist zwischen 2 und 3 Uhr. Laut Webseite sollten derzeit Wartungsarbeiten laufen.\n\nTrotztdem weitermachen?", "eventuelle Wartungsarbeiten", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -173,23 +171,23 @@ public class HisqisGUI extends JFrame implements PropertyChangeListener, ActionL
 	public void process(boolean forceLoginDialog) {
 		syncButton.setEnabled(false);
 
-		if (username == null || password == null || forceLoginDialog) {
-			Object[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, username, password);
+		if (settings.username == null || settings.password == null || forceLoginDialog) {
+			Object[] loginData = HisqisLoginDataDialog.getLoginDataViaDialog(this, settings.username, settings.password);
 
 			if (!(Boolean) loginData[0] || loginData.length != 3) {
 				syncButton.setEnabled(true);
 				return;
 			}
 
-			username = (String) loginData[1];
-			password = (String) loginData[2];
+			settings.username = (String) loginData[1];
+			settings.password = (String) loginData[2];
 		}
 
-		grabber = new HisqisGUIGrabber(this.username, this.password);
+		grabber = new HisqisGUIGrabber(settings.username, settings.password);
 		grabber.addPropertyChangeListener(this);
 
-		grabber.setUser(username);
-		grabber.setPassword(password);
+		grabber.setUser(settings.username);
+		grabber.setPassword(settings.password);
 
 		grabber.execute();
 	}

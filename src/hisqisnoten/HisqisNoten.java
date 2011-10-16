@@ -16,6 +16,8 @@
 
 package hisqisnoten;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -25,6 +27,8 @@ import org.apache.commons.cli.PosixParser;
 
 import hisqisnoten.console.HisqisConsole;
 import hisqisnoten.gui.HisqisGUI;
+import hisqisnoten.settings.HisqisSettings;
+import hisqisnoten.settings.HisqisSettingsReader;
 
 /**
  * 
@@ -60,13 +64,37 @@ public class HisqisNoten {
 				System.exit(1);
 			}
 
+			HisqisSettings settings = null;
+			HisqisSettings.genConfigPath();
+
+			for (File configpath : HisqisSettings.configpath) {
+				if (configpath.exists() && configpath.canRead()) {
+					settings = HisqisSettingsReader.loadDocument(configpath);
+
+					if (settings != null) {
+						break;
+					}
+				}
+			}
+
+			if (settings == null) {
+				settings = new HisqisSettings();
+			}
+
 			String user = cmdline.getOptionValue("user", null);
 			String pass = cmdline.getOptionValue("pass", null);
 
+			if (user != null) {
+				settings.username = user;
+			}
+			if (pass != null) {
+				settings.password = pass;
+			}
+
 			if (cmdline.hasOption("console")) {
-				new HisqisConsole(user, pass);
+				new HisqisConsole(settings);
 			} else {
-				new HisqisGUI(user, pass);
+				new HisqisGUI(settings);
 			}
 		} catch (ParseException e) {
 			printHelp();

@@ -7,5 +7,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/HisqisNoten/lib/commons-cli-1.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jdom-1.1.jar" sourcepath="lib/jdom-1.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HisqisNoten/lib/jdom-1.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
